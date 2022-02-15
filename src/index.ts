@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 
 const port = process.env.PORT || 3001
 
-mongoose.connect(<string>process.env.MONGO_CONNECTION + '/prod', () => {
+mongoose.connect(<string>process.env.MONGO_CONNECTION_PROD, () => {
     console.log('Connected to Mongo!')
     server.listen(port, () => {
         console.log(`Server listening on port ${port}`)
