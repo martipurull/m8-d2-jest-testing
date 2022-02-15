@@ -9,7 +9,7 @@ productRouter
             if (!req.body.name || !req.body.price) {
                 return res.status(400).send()
             } else {
-                const newProduct = new ProductModel(req.body)
+                const newProduct = await new ProductModel(req.body)
                 await newProduct.save()
                 res.send(newProduct)
             }
@@ -18,5 +18,12 @@ productRouter
             res.status(500).send()
         }
     })
+    .get('/:productId', async (req, res) => {
+        const product = await ProductModel.findById(req.params.productId)
+        product ? res.send(product) : res.status(404).send()
+    })
+// .put('/:productId', async (req, res) => {
+//     const editedProduct = await ProductModel.findByIdAndUpdate(req.params.productId)
+// })
 
 export default productRouter

@@ -17,16 +17,22 @@ describe('Checking out jest in typscript', () => {
 })
 
 describe('Tests all endpoints in the server', () => {
+
     beforeAll(done => {
-        mongoose.connect('mongodb+srv://striver:striver@cluster0.zbate.mongodb.net/jest-test?retryWrites=true&w=majority', () => {
-            console.log('Connected to Mongo')
-            done()
-        })
+        try {
+            mongoose.connect(process.env.MONGO_CONNECTION_TEST, () => {
+                console.log('Connected to Mongo')
+                done()
+            })
+            mongoose.connection.on('error', (err) => console.log(err))
+
+        } catch (error) {
+            console.error(error)
+        }
     })
+
     afterAll(done => {
-        mongoose.connection.dropDatabase()
-            .then(() => mongoose.connection.close())
-            .then(() => done())
+        mongoose.connection.close().then(() => done())
     })
 
     test('that the test endpoint returns a success message', async () => {
@@ -62,12 +68,12 @@ describe('Tests all endpoints in the server', () => {
     })
 
     test('that GET /products/:productId returns the correct product', async () => {
-        const response = await request.get('/products/620bc5964015c1b3c86b6ebe')
+        const response = await request.get(`/products/${createdProductId}`)
         expect(response.body._id).toBeDefined()
     })
 
     test('that DELETE /products/:productId deletes the product', async () => {
-        const response = await request.delete('/products/620bc5964015c1b3c86b6ebe')
+        const response = await request.delete(`/products/${createdProductId}`)
         expect(response.status).toBe(204)
     })
 
@@ -77,7 +83,7 @@ describe('Tests all endpoints in the server', () => {
     })
 
     test('that PUT /products/:productId requests are accepted', async () => {
-        const response = await request.put('/products/620bc5964015c1b3c86b6ebe')
+        const response = await request.put(`/products/${createdProductId}`)
         expect(response.status).toBe(200)
     })
 
@@ -87,12 +93,12 @@ describe('Tests all endpoints in the server', () => {
     })
 
     test('that PUT /products/:productId changes the name of the product', async () => {
-        const response = await request.put('/products/620bc5964015c1b3c86b6ebe')
+        const response = await request.put(`/products/${createdProductId}`)
         expect(response.body.name).not.toBe(validProduct.name)
     })
 
     test('that PUT /products/:productId returns a name of type string', async () => {
-        const response = await request.put('/products/620bc5964015c1b3c86b6ebe')
-        expect(typeof response.body.name).toBe('string')
+        const response = await request.put(`/products/${createdProductId}`)
+        expect(typeof response.body.name).toBeInstanceOf(String)
     })
 })
