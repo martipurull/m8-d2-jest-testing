@@ -1,0 +1,2 @@
+process.env.MONGO_CONNECTION_JEST_TEST = 'mongodb + srv://striver:striver@cluster0.zbate.mongodb.net/jest-test?retryWrites=true&w=majority'
+process.env.MONGO_CONNECTION_JEST_PROD = 'mongodb + srv://striver:striver@cluster0.zbate.mongodb.net/jest-prod?retryWrites=true&w=majority'
