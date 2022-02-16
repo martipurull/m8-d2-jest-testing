@@ -20,7 +20,7 @@ describe('Tests all endpoints in the server', () => {
 
     beforeAll(done => {
         try {
-            mongoose.connect(process.env.MONGO_CONNECTION_TEST, () => {
+            mongoose.connect(process.env.MONGO_CONNECTION_JEST_TEST, () => {
                 console.log('Connected to Mongo')
                 done()
             })
